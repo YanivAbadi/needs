@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>שאלון צרכים אישיים</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .question-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            display: none;
+        }
+        .active {
+            display: block;
+        }
+        .stage-title {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        .question {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+        }
+        .yes-btn {
+            background-color: #2ecc71;
+            color: white;
+        }
+        .no-btn {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .results-container {
+            display: none;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .result-bar {
+            height: 30px;
+            background-color: #ecf0f1;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+        .result-fill {
+            height: 100%;
+            background-color: #3498db;
+            width: 0%;
+            transition: width 0.5s ease-in-out;
+        }
+        .result-text {
+            position: absolute;
+            top: 50%;
+            left: 10px;
+            transform: translateY(-50%);
+            color: #2c3e50;
+            font-weight: bold;
+        }
+        .percentage {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            font-weight: bold;
+        }
+        .restart-btn {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            display: block;
+            margin: 20px auto 0;
+        }
+        .progress-container {
+            width: 100%;
+            background-color: #f1f1f1;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            height: 10px;
+        }
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background-color: #3498db;
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;">שאלון צרכים אישיים</h1>
+    
+    <div class="progress-container">
+        <div id="progressBar" class="progress-bar"></div>
+    </div>
+    
+    <div id="question1" class="question-container active">
+        <h2 class="stage-title">צורך בביטחון</h2>
+        <div class="question">1. האם אתה מרגיש שיש לך יציבות כלכלית?</div>
+        <div class="buttons">
+            <button class="btn yes-btn" onclick="answer(1, true)">כן</button>
+            <button class="btn no-btn" onclick="answer(1, false)">לא</button>
+        </div>
+    </div>
+    
+    <div id="question2" class="question-container">
+        <h2 class="stage-title">צורך בביטחון</h2>
+        <div class="question">2. האם אתה מרגיש מוגן בביתך ובסביבתך הקרובה?</div>
+        <div class="buttons">
+            <button class="btn yes-btn" onclick="answer(2, true)">כן</button>
+            <button class="btn no-btn" onclick="answer(2, false)">לא</button>
+        </div>
+    </div>
+    
+    <div id="question3" class="question-container">
+        <h2 class="stage-title">צורך בביטחון</h2>
+        <div class="question">3. האם יש לך תוכנית ברורה להתמודדות עם מצבי חירום?</div>
+        <div class="buttons">
+            <button class="btn yes-btn" onclick="answer(3, true)">כן</button>
+            <button class="btn no-btn" onclick="answer(3, false)">לא</button>
+        </div>
+    </div>
+    
+    <div id="question4" class="question-container">
+        <h2 class="stage-title">צורך באהבה ושייכות</h2>
+        <div class="question">4. האם יש לך אדם או אנשים שאתה מרגיש שהם אוהבים אותך ללא תנאי?</div>
+        <div class="buttons">
+            <button class="btn yes-btn" onclick="answer(4, true)">כן</button>
+            <button class="btn no-btn" onclick="answer(4, false)">לא</button>
+        </div>
+    </div>
+    
+    <div id="question5" class="question-container">
+        <h2 class="stage-title">צורך באהבה ושייכות</h2>
+        <div class="question">5. האם אתה מרגיש חלק מקבוצה, משפחה או קהילה תומכת?</div>
+        <div class="buttons">
+            <button class="btn yes-btn" onclick="answer(5, true)">כן</button>
+            <button class="btn no-btn" onclick="answer(5, false)">לא</button>
+        </div>
+    </div>
+    
+    <div id="question6" class="question-container">
+        <h2 class="stage-title">צורך באהבה ושייכות</h2>
+        <div class="question">6. האם אתה מרגיש שייכות למקום שבו אתה חי או עובד?</div>
+        <div class="buttons">
+            <button class="btn yes-btn" onclick="answer(6, true)">כן</button>
+            <button class="btn no-btn" onclick="answer(6, false)">לא</button>
+        </div>
+    </div>
+    
+    <div id="question7" class="question-container">
+        <h2 class="stage-title">צורך במשמעות ומטרה</h2>
+        <div class="question">7. האם אתה מרגיש שלחיים שלך יש מטרה ברורה?</div>
+        <div class="buttons">
+            <button class="btn yes-btn" onclick="answer(7, true)">כן</button>
+            <button class="btn no-btn" onclick="answer(7, false)">לא</button>
+        </div>
+    </div>
+    
+    <div id="question8" class="question-container">
+        <h2 class="stage-title">צורך במשמעות ומטרה</h2>
+        <div class="question">8. האם אתה עושה דברים שמרגישים לך בעלי ערך ומשמעות?</div>
+        <div class="buttons">
+            <button class="btn yes-btn" onclick="answer(8, true)">כן</button>
+            <button class="btn no-btn" onclick="answer(8, false)">לא</button>
+        </div>
+    </div>
+    
+    <div id="question9" class="question-container">
+        <h2 class="stage-title">צורך במשמעות ומטרה</h2>
+        <div class="question">9. האם יש לך חזון או שאיפה ארוכת טווח שמנחים אותך?</div>
+        <div class="buttons">
+            <button class="btn yes-btn" onclick="answer(9, true)">כן</button>
+            <button class="btn no-btn" onclick="answer(9, false)">לא</button>
+        </div>
+    </div>
+    
+    <div id="question10" class="question-container">
+        <h2 class="stage-title">צורך בהערכה והכרה</h2>
+        <div class="question">10. האם אתה מרגיש שמעריכים את הכישורים והמאמצים שלך?</div>
+        <div class="buttons">
+            <button class="btn yes-btn" onclick="answer(10, true)">כן</button>
+            <button class="btn no-btn" onclick="answer(10, false)">לא</button>
+        </div>
+    </div>
+    
+    <div id="question11" class="question-container">
+        <h2 class="stage-title">צורך בהערכה והכרה</h2>
+        <div class="question">11. האם אתה מקבל משוב חיובי על העשייה שלך?</div>
+        <div class="buttons">
+            <button class="btn yes-btn" onclick="answer(11, true)">כן</button>
+            <button class="btn no-btn" onclick="answer(11, false)">לא</button>
+        </div>
+    </div>
+    
+    <div id="question12" class="question-container">
+        <h2 class="stage-title">צורך בהערכה והכרה</h2>
+        <div class="question">12. האם אתה גאה בעצמך על ההישגים שלך?</div>
+        <div class="buttons">
+            <button class="btn yes-btn" onclick="answer(12, true)">כן</button>
+            <button class="btn no-btn" onclick="answer(12, false)">לא</button>
+        </div>
+    </div>
+    
+    <div id="question13" class="question-container">
+        <h2 class="stage-title">צורך באוטונומיה וחופש בחירה</h2>
+        <div class="question">13. האם אתה מרגיש שיש לך שליטה על ההחלטות שלך בחיים?</div>
+        <div class="buttons">
+            <button class="btn yes-btn" onclick="answer(13, true)">כן</button>
+            <button class="btn no-btn" onclick="answer(13, false)">לא</button>
+        </div>
+    </div>
+    
+    <div id="question14" class="question-container">
+        <h2 class="stage-title">צורך באוטונומיה וחופש בחירה</h2>
+        <div class="question">14. האם יש לך אפשרות לבחור את הכיוון שאליו אתה רוצה ללכת?</div>
+        <div class="buttons">
+            <button class="btn yes-btn" onclick="answer(14, true)">כן</button>
+            <button class="btn no-btn" onclick="answer(14, false)">לא</button>
+        </div>
+    </div>
+    
+    <div id="question15" class="question-container">
+        <h2 class="stage-title">צורך באוטונומיה וחופש בחירה</h2>
+        <div class="question">15. האם אתה מרגיש חופשי להיות מי שאתה באמת?</div>
+        <div class="buttons">
+            <button class="btn yes-btn" onclick="answer(15, true)">כן</button>
+            <button class="btn no-btn" onclick="answer(15, false)">לא</button>
+        </div>
+    </div>
+    
+    <div id="question16" class="question-container">
+        <h2 class="stage-title">צורך בצמיחה והתפתחות אישית</h2>
+        <div class="question">16. האם אתה מרגיש שאתה לומד ומתפתח באופן קבוע?</div>
+        <div class="buttons">
+            <button class="btn yes-btn" onclick="answer(16, true)">כן</button>
+            <button class="btn no-btn" onclick="answer(16, false)">לא</button>
+        </div>
+    </div>
+    
+    <div id="question17" class="question-container">
+        <h2 class="stage-title">צורך בצמיחה והתפתחות אישית</h2>
+        <div class="question">17. האם אתה מתנסה באתגרים חדשים שמקדמים אותך?</div>
+        <div class="buttons">
+            <button class="btn yes-btn" onclick="answer(17, true)">כן</button>
+            <button class="btn no-btn" onclick="answer(17, false)">לא</button>
+        </div>
+    </div>
+    
+    <div id="question18" class="question-container">
+        <h2 class="stage-title">צורך בצמיחה והתפתחות אישית</h2>
+        <div class="question">18. האם אתה משקיע זמן בשיפור היכולות והכישורים שלך?</div>
+        <div class="buttons">
+            <button class="btn yes-btn" onclick="answer(18, true)">כן</button>
+            <button class="btn no-btn" onclick="answer(18, false)">לא</button>
+        </div>
+    </div>
+    
+    <div id="question19" class="question-container">
+        <h2 class="stage-title">צורך בקשרים חברתיים ותמיכה</h2>
+        <div class="question">19. האם יש לך אנשים שאתה יכול לפנות אליהם בעת צורך?</div>
+        <div class="buttons">
+            <button class="btn yes-btn" onclick="answer(19, true)">כן</button>
+            <button class="btn no-btn" onclick="answer(19, false)">לא</button>
+        </div>
+    </div>
+    
+    <div id="question20" class="question-container">
+        <h2 class="stage-title">צורך בקשרים חברתיים ותמיכה</h2>
+        <div class="question">20. האם אתה מרגיש שמישהו מקשיב לך באמת כשאתה משתף?</div>
+        <div class="buttons">
+            <button class="btn yes-btn" onclick="answer(20, true)">כן</button>
+            <button class="btn no-btn" onclick="answer(20, false)">לא</button>
+        </div>
+    </div>
+    
+    <div id="question21" class="question-container">
+        <h2 class="stage-title">צורך בקשרים חברתיים ותמיכה</h2>
+        <div class="question">21. האם יש לך חברים שאתה יכול לסמוך עליהם?</div>
+        <div class="buttons">
+            <button class="btn yes-btn" onclick="answer(21, true)">כן</button>
+            <button class="btn no-btn" onclick="answer(21, false)">לא</button>
+        </div>
+    </div>
+    
+    <div id="question22" class="question-container">
+        <h2 class="stage-title">צורך בהנאה ושמחה</h2>
+        <div class="question">22. האם אתה עושה דברים שמסבים לך הנאה על בסיס קבוע?</div>
+        <div class="buttons">
+            <button class="btn yes-btn" onclick="answer(22, true)">כן</button>
+            <button class="btn no-btn" onclick="answer(22, false)">לא</button>
+        </div>
+    </div>
+    
+    <div id="question23" class="question-container">
+        <h2 class="stage-title">צורך בהנאה ושמחה</h2>
+        <div class="question">23. האם אתה מרגיש שמחה במהלך חיי היומיום שלך?</div>
+        <div class="buttons">
+            <button class="btn yes-btn" onclick="answer(23, true)">כן</button>
+            <button class="btn no-btn" onclick="answer(23, false)">לא</button>
+        </div>
+    </div>
+    
+    <div id="question24" class="question-container">
+        <h2 class="stage-title">צורך בהנאה ושמחה</h2>
+        <div class="question">24. האם אתה מרגיש שיש לך זמן לפעילויות פנאי שאתה אוהב?</div>
+        <div class="buttons">
+            <button class="btn yes-btn" onclick="answer(24, true)">כן</button>
+            <button class="btn no-btn" onclick="answer(24, false)">לא</button>
+        </div>
+    </div>
+    
+    <div id="question25" class="question-container">
+        <h2 class="stage-title">צורך ביצירתיות והבעה עצמית</h2>
+        <div class="question">25. האם יש לך אפשרות להביע את עצמך בדרכים שמתאימות לך?</div>
+        <div class="buttons">
+            <button class="btn yes-btn" onclick="answer(25, true)">כן</button>
+            <button class="btn no-btn" onclick="answer(25, false)">לא</button>
+        </div>
+    </div>
+    
+    <div id="question26" class="question-container">
+        <h2 class="stage-title">צורך ביצירתיות והבעה עצמית</h2>
+        <div class="question">26. האם אתה עוסק בפעילויות שמעוררות את הדמיון והיצירתיות שלך?</div>
+        <div class="buttons">
+            <button class="btn yes-btn" onclick="answer(26, true)">כן</button>
+            <button class="btn no-btn" onclick="answer(26, false)">לא</button>
+        </div>
+    </div>
+    
+    <div id="question27" class="question-container">
+        <h2 class="stage-title">צורך ביצירתיות והבעה עצמית</h2>
+        <div class="question">27. האם אתה מרגיש שהקול הייחודי שלך נשמע ומקבל מקום?</div>
+        <div class="buttons">
+            <button class="btn yes-btn" onclick="answer(27, true)">כן</button>
+            <button class="btn no-btn" onclick="answer(27, false)">לא</button>
+        </div>
+    </div>
+    
+    <div id="question28" class="question-container">
+        <h2 class="stage-title">צורך בבריאות ורווחה גופנית</h2>
+        <div class="question">28. האם אתה מרגיש בריא וחיוני ברוב הימים?</div>
+        <div class="buttons">
+            <button class="btn yes-btn" onclick="answer(28, true)">כן</button>
+            <button class="btn no-btn" onclick="answer(28, false)">לא</button>
+        </div>
+    </div>
+    
+    <div id="question29" class="question-container">
+        <h2 class="stage-title">צורך בבריאות ורווחה גופנית</h2>
+        <div class="question">29. האם אתה מקפיד על תזונה מאוזנת ופעילות גופנית?</div>
+        <div class="buttons">
+            <button class="btn yes-btn" onclick="answer(29, true)">כן</button>
+            <button class="btn no-btn" onclick="answer(29, false)">לא</button>
+        </div>
+    </div>
+    
+    <div id="question30" class="question-container">
+        <h2 class="stage-title">צורך בבריאות ורווחה גופנית</h2>
+        <div class="question">30. האם אתה ישן מספיק ומרגיש נינוח כשאתה מתעורר?</div>
+        <div class="buttons">
+            <button class="btn yes-btn" onclick="answer(30, true)">כן</button>
+            <button class="btn no-btn" onclick="answer(30, false)">לא</button>
+        </div>
+    </div>
+    
+    <div id="results" class="results-container">
+        <h2 style="text-align: center;">תוצאות השאלון</h2>
+        
+        <h3>צורך בביטחון</h3>
+        <div class="result-bar">
+            <div id="result1" class="result-fill"></div>
+            <span class="result-text">ביטחון</span>
+            <span id="percent1" class="percentage">0%</span>
+        </div>
+        
+        <h3>צורך באהבה ושייכות</h3>
+        <div class="result-bar">
+            <div id="result2" class="result-fill"></div>
+            <span class="result-text">אהבה ושייכות</span>
+            <span id="percent2" class="percentage">0%</span>
+        </div>
+        
+        <h3>צורך במשמעות ומטרה</h3>
+        <div class="result-bar">
+            <div id="result3" class="result-fill"></div>
+            <span class="result-text">משמעות ומטרה</span>
+            <span id="percent3" class="percentage">0%</span>
+        </div>
+        
+        <h3>צורך בהערכה והכרה</h3>
+        <div class="result-bar">
+            <div id="result4" class="result-fill"></div>
+            <span class="result-text">הערכה והכרה</span>
+            <span id="percent4" class="percentage">0%</span>
+        </div>
+        
+        <h3>צורך באוטונומיה וחופש בחירה</h3>
+        <div class="result-bar">
+            <div id="result5" class="result-fill"></div>
+            <span class="result-text">אוטונומיה וחופש</span>
+            <span id="percent5" class="percentage">0%</span>
+        </div>
+        
+        <h3>צורך בצמיחה והתפתחות אישית</h3>
+        <div class="result-bar">
+            <div id="result6" class="result-fill"></div>
+            <span class="result-text">צמיחה והתפתחות</span>
+            <span id="percent6" class="percentage">0%</span>
+        </div>
+        
+        <h3>צורך בקשרים חברתיים ותמיכה</h3>
+        <div class="result-bar">
+            <div id="result7" class="result-fill"></div>
+            <span class="result-text">קשרים חברתיים</span>
+            <span id="percent7" class="percentage">0%</span>
+        </div>
+        
+        <h3>צורך בהנאה ושמחה</h3>
+        <div class="result-bar">
+            <div id="result8" class="result-fill"></div>
+            <span class="result-text">הנאה ושמחה</span>
+            <span id="percent8" class="percentage">0%</span>
+        </div>
+        
+        <h3>צורך ביצירתיות והבעה עצמית</h3>
+        <div class="result-bar">
+            <div id="result9" class="result-fill"></div>
+            <span class="result-text">יצירתיות והבעה</span>
+            <span id="percent9" class="percentage">0%</span>
+        </div>
+        
+        <h3>צורך בבריאות ורווחה גופנית</h3>
+        <div class="result-bar">
+            <div id="result10" class="result-fill"></div>
+            <span class="result-text">בריאות ורווחה</span>
+            <span id="percent10" class="percentage">0%</span>
+        </div>
+        
+        <button class="restart-btn" onclick="restartQuiz()">התחל מחדש</button>
+    </div>
+    
+    <script>
+        const answers = Array(30).fill(false);
+        let currentQuestion = 1;
+        const totalQuestions = 30;
+        
+        function updateProgressBar() {
+            const progress = ((currentQuestion - 1) / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+        }
+        
+        function answer(questionNumber, isYes) {
+            answers[questionNumber - 1] = isYes;
+            
+            // Hide current question
+            document.getElementById(`question${questionNumber}`).classList.remove('active');
+            
+            // If there's another question, show it
+            if (questionNumber < totalQuestions) {
+                document.getElementById(`question${questionNumber + 1}`).classList.add('active');
+                currentQuestion = questionNumber + 1;
+                updateProgressBar();
+            } else {
+                // Show results
+                showResults();
+            }
+        }
+        
+        function showResults() {
+            // Category mappings (starting with index 0)
+            const categories = [
+                { name: "ביטחון", start: 0, end: 2 },
+                { name: "אהבה ושייכות", start: 3, end: 5 },
+                { name: "משמעות ומטרה", start: 6, end: 8 },
+                { name: "הערכה והכרה", start: 9, end: 11 },
+                { name: "אוטונומיה וחופש", start: 12, end: 14 },
+                { name: "צמיחה והתפתחות", start: 15, end: 17 },
+                { name: "קשרים חברתיים", start: 18, end: 20 },
+                { name: "הנאה ושמחה", start: 21, end: 23 },
+                { name: "יצירתיות והבעה", start: 24, end: 26 },
+                { name: "בריאות ורווחה", start: 27, end: 29 }
+            ];
+            
+            categories.forEach((category, index) => {
+                const categoryAnswers = answers.slice(category.start, category.end + 1);
+                const yesCount = categoryAnswers.filter(answer => answer === true).length;
+                const percentage = Math.round((yesCount / (category.end - category.start + 1)) * 100);
+                
+                // Update the result bar
+                document.getElementById(`result${index + 1}`).style.width = `${percentage}%`;
+                document.getElementById(`percent${index + 1}`).textContent = `${percentage}%`;
+            });
+            
+            // Hide all questions and show results
+            document.getElementById(`question${currentQuestion}`).classList.remove('active');
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('progressBar').style.width = '100%';
+        }
+        
+        function restartQuiz() {
+            // Reset answers
+            for (let i = 0; i < answers.length; i++) {
+                answers[i] = false;
+            }
+            
+            // Hide results
+            document.getElementById('results').style.display = 'none';
+            
+            // Show first question
+            document.getElementById('question1').classList.add('active');
+            currentQuestion = 1;
+            
+            // Reset progress bar
+            updateProgressBar();
+        }
+        
+        // Initialize progress bar
+        updateProgressBar();
+    </script>
+</body>
+</html>
